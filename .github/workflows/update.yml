@@ -1,0 +1,27 @@
+name: Trigger Other Repo Build
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+
+    - name: Trigger Other Repo Build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Use your GitHub token to trigger the workflow in the other repo
+        # Example using curl:
+        curl -X POST \
+            -H "Accept: application/vnd.github.everest-preview+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/stb-gaming/sky-games/repo/dispatches \
+            -d '{"event_type": "build-event"}'
